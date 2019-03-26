@@ -68,31 +68,7 @@
   - retrieve file upload token; using for example admin user and password `curl --noproxy localhost -X POST -H "Content-Type: application/json" -u admin:password -T "uploadFileToken.json" http://localhost:8080/ssc/api/v1/fileTokens` where content of `uploadFileToken.json` is `{"fileTokenType": "UPLOAD"}`
   - upload scan with engine type parameter; using token retrieved in previous operation `curl --noproxy localhost -X POST --form files=@"security.csv" "http://localhost:8080/ssc/upload/resultFileUpload.html?mat=TOKEN_FROM_PREV_OPERATION&entityId=APPLICATION_VERSION_ID&engineType=SAMPLE"` where engine type parameter matches engine type registered by the parser plugin (`plugin.xml/plugin/issue-parser/engine-type`)
 
-## `scan.info` metadata contract
-- `scan.info` is a property file
-  - SSC can retrieve two properties from the file: `engineType` (STRING) and `scanDate` (STRING)
-- The `scan.info` file must provide at least engineType property, designating scan producer, which will match engine type registered by parser plugin (`plugin.xml/plugin/issue-parser/engine-type`).
-- The `scan.info` file can also provide the `scanDate` property value in ISO-8601 format.
-  - If `scanDate` is not provided, the parser plugin is responsible for providing a meaningful scan date value for SSC operations.
 
-## Generating scan with fixed or random data
-The sample plugin library can also be used as a generator for scans that can be parsed by the plugin itself.
-
-Two types of scans can be generated. A fixed scan with more realistic but small data and a random scan with artificial data but with configurable size.
-The fixed scan will be automatically generated to the `build/scan/fixed-sample-scan.zip` as a part of a project's build.
-
-The usage for the fixed scan generator is as follows:
-- `java -cp path/to/sample-parser-[version].jar com.thirdparty.ScanGenerator fixed <FIXED_OUTPUT_SCAN_ZIP_NAME>`
-  - For example, in the project root: `java -cp build/libs/* com.thirdparty.ScanGenerator fixed fixed_sample_scan.zip`
-
-The usage for the random scan generator is as follows:
-- `java -cp path/to/sample-parser-[version].jar com.thirdparty.ScanGenerator random <RANDOM_OUTPUT_SCAN_ZIP_NAME> <ISSUE_COUNT> <CATEGORY_COUNT> <LONG_TEXT_SIZE>`
-  - For example, in the project root: `java -cp build/libs/* com.thirdparty.ScanGenerator random random_sample_scan.zip 50 10 500`
-
-## Debugging
-- A developer can follow `ssc.log` and `plugin-framework.log` to monitor what is happening in SSC and the plugin container.
-  - `ssc.log` is, by default, located in the application server log directory or can be configured by the  `com.fortify.ssc.logPath` JVM system property.
-  - The plugin container log is stored by default in the `<fortify.plugins.home>/log` directory and can be configured in `org.ops4j.pax.logging.cfg` (`WEB-INF/plugin-framework/etc`).
 
 ## FAQ
 1) What is a scan?
@@ -124,5 +100,3 @@ The usage for the random scan generator is as follows:
    - The engine type provided with the scan is different from the engine type provided by the parser plugin, or there is no installed/enabled plugin of the specified engine type in SSC.
    - Parser plugin registration failed - check the plugin container logs and SSC logs for errors.
 
-6) Will my parser plugin developed for SSC/PluginFramework 17.10 work automatically with SSC/PluginFramework 17.20?
-   - No. There is a change in XML namespace for plugin.xml. So the minimal change needed for 17.20 support is plugin.xml update. After that, there is a high probability that your plugin will be compatible with 17.20. However, due to significant improvements and validations added in SSC 17.20, be prepared to test your plugin with SSC/PluginFramework 17.20 and update your plugin for compatibility, if needed.
