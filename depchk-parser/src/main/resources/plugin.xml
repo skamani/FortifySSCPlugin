@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<plugin xmlns="xmlns://www.fortify.com/schema/pluginmanifest-1.0.xsd"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="PluginDescriptor"
+   		id="com.fortify.parser.depchk" api-version="1.0">
+    <plugin-info>
+        <name>OWASP Dependency Check parser plugin</name>
+        <version><!--VERSION-->0.0<!--/VERSION--></version>
+        <data-version>1</data-version>
+        <vendor name="OWASP" url="https://jeremylong.github.io/DependencyCheck/"/>
+        <description>Dependency Check parser plugin implementation</description>
+        <resources>
+            <localization>
+                <language id="default" location="/resources/depchk_en.properties"/>
+                
+                <language id="en" location="/resources/depchk_en.properties"/>
+                
+            </localization>
+            <images>
+                <image imageType="icon" location="/images/depchk-icon.png"/>
+                <image imageType="logo" location="/images/depchk-logo.png"/>
+            </images>
+        </resources>
+    </plugin-info>
+    <issue-parser xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <engine-type>DEPCHK</engine-type>
+        <supported-engine-versions>[2.2, 4.3]</supported-engine-versions>
+        <view-template location="/viewtemplate/DepChkTemplate.json">
+            <description>OWASP Dependency Check vulnerability view template.</description>
+        </view-template>
+    </issue-parser>
+</plugin>
+
